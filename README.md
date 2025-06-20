@@ -57,24 +57,32 @@ npm run dev
 ## Building for Production
 To build the project for production:
 
+```sh
 npm run build
+```
 # or
+```sh
 yarn build
+```
 
 The output will be in the dist/ folder.
 ---
 
-##Preview Production Build
+## Preview Production Build
 To locally preview the production build:
 
+```sh
 npm run preview
+```
 # or
+```sh
 yarn preview
+```
 ---
 
 ## 🛠 Project Structure
 
-├── public/               # Static assets like favicon, images, etc.
+├── public/        # Static assets like favicon, images, etc.
 ├── src/
 │   ├── components/       # React components (shadcn-ui based components here)
 │   ├── styles/           # Global and Tailwind CSS files
@@ -98,23 +106,24 @@ Vite provides fast hot module replacement (HMR) and optimized builds.
 ---
 
 ## 🔧 Useful Scripts
-Command	Description
-npm run dev	Start development server
-npm run build	Build production bundle
-npm run preview	Preview production build locally
-npm run lint	Run ESLint checks (if configured)
+npm run dev:	Start development server
+npm run build:	Build production bundle
+npm run preview:	Preview production build locally
+npm run lint:	Run ESLint checks (if configured)
 ---
+
 ## 📚 Resources
-Vite Documentation
+Vite Documentation: https://vitejs.dev/
 
-React Documentation
+React Documentation: https://reactjs.org/
 
-TypeScript Documentation
+TypeScript Documentation: https://www.typescriptlang.org/docs/
 
-shadcn-ui Documentation
+shadcn-ui Documentation: https://ui.shadcn.com/
 
-Tailwind CSS Documentation
+Tailwind CSS Documentation: https://tailwindcss.com/
 ---
+
 ## 🤝 Contributing
 Feel free to open issues or submit pull requests!
 ---
