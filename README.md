@@ -26,10 +26,10 @@ Follow these steps:
 
 ```sh
 # Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone https://github.com/injifannoo/oromo-cultural-food.git
 
 # Step 2: Navigate to the project directory.
-cd <oromoFood>
+cd oromo-cultural-food
 
 # Step 3: Install the necessary dependencies.
 npm install
@@ -54,7 +54,7 @@ npm run dev
 
 
 ---
-##Building for Production
+## Building for Production
 To build the project for production:
 
 npm run build
@@ -72,7 +72,7 @@ npm run preview
 yarn preview
 ---
 
-##🛠 Project Structure
+## 🛠 Project Structure
 
 ├── public/               # Static assets like favicon, images, etc.
 ├── src/
@@ -87,7 +87,7 @@ yarn preview
 └── package.json          # Project metadata and scripts
 ---
 
-##📝 Notes
+## 📝 Notes
 This project uses shadcn-ui for accessible UI components, customizable with Tailwind CSS classes.
 
 Tailwind CSS is configured with JIT mode for fast builds and great developer experience.
@@ -97,14 +97,14 @@ TypeScript ensures type safety across the codebase.
 Vite provides fast hot module replacement (HMR) and optimized builds.
 ---
 
-##🔧 Useful Scripts
+## 🔧 Useful Scripts
 Command	Description
 npm run dev	Start development server
 npm run build	Build production bundle
 npm run preview	Preview production build locally
 npm run lint	Run ESLint checks (if configured)
 ---
-##📚 Resources
+## 📚 Resources
 Vite Documentation
 
 React Documentation
@@ -115,6 +115,6 @@ shadcn-ui Documentation
 
 Tailwind CSS Documentation
 ---
-##🤝 Contributing
+## 🤝 Contributing
 Feel free to open issues or submit pull requests!
 ---
