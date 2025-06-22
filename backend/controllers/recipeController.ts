@@ -12,7 +12,7 @@ export const addRecipe = async (req: Request, res: Response) => {
   const { title, description, region } = req.body;
   const imageUrl = (req as any).file?.path || '';
 
-  if (!title || !description || !region || !imageUrl) {
+  if (!title || !description || !region) {
      res.status(400).json({ message: 'All fields required' });
      return;
   }

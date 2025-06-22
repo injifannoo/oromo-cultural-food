@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/recipes', getRecipes);
 router.post('/recipes', upload.single('image'), addRecipe);
 router.delete('/recipes/:id', deleteRecipe);
-router.put('/:id', updateRecipe);
+router.put('/recipes/:id', updateRecipe);
 router.get('/recipes/:id', getRecipeById);
 router.post('/signup', signup);
 router.get('/login',login);
