@@ -27,4 +27,5 @@ const RecipeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+
 export default mongoose.model('Recipe', RecipeSchema);
