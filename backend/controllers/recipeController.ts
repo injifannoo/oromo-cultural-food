@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
 import Recipe from '../models/Recipe';
+import User from '../models/Users';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 export const getRecipes = async (req: Request, res: Response) => {
   const { region } = req.query;
@@ -9,6 +12,13 @@ export const getRecipes = async (req: Request, res: Response) => {
 };
 
 export const addRecipe = async (req: Request, res: Response) => {
+   if (!req.body) {
+       res.status(400).json({ message: 'Request body is missing' });
+    }
+  // if (!req.file) {
+  //   res.status(400).json({ message: 'Image file is required' });  
+  //   return;
+  // } 
   const { title, description, region } = req.body;
   const imageUrl = (req as any).file?.path || '';
 
@@ -17,9 +27,13 @@ export const addRecipe = async (req: Request, res: Response) => {
      return;
   }
 
-  const newRecipe = new Recipe({ title, description, region, imageUrl });
+  const newRecipe = new Recipe({ title, description, region });
   await newRecipe.save();
   res.status(201).json(newRecipe);
+
+  res.status(201).json({ message: 'User registered successfully', newRecipe});
+
+
 };
 export const getRecipeById = async (req: Request, res: Response) => {
   const { id } = req.params; 
@@ -53,14 +67,14 @@ export const updateRecipe = async (req: Request, res: Response) => {
   const { id } = req.params;  
   const { title, description, region } = req.body;
   const imageUrl = (req as any).file?.path || '';
-  if (!title || !description || !region || !imageUrl) {
+  if (!title || !description || !region) {
     res.status(400).json({ message: 'All fields required' });
     return;
   }
   try {
     const updatedRecipe = await Recipe.findByIdAndUpdate(
       id,
-      { title, description, region, imageUrl },
+      { title, description, region },
       { new: true }
     );
     if (!updatedRecipe) {
@@ -98,27 +112,80 @@ export const rateRecipe = async (req: Request, res: Response) => {
 };
  
 export const signup = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+   if (!req.body) {
+       res.status(400).json({ message: 'Request body is missing' });
+    }
+  
+  try {
+    const { name, email, password } = req.body;
 
-  if (!username || !password) {
-    res.status(400).json({ message: 'Username and password are required' });
-    return;
+    if (!name || !email || !password) {
+       res.status(400).json({ message: 'Name, Email, and Password are required' });
+    }
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+       res.status(400).json({ message: 'User already exists with this email' });
+    }
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    const newUser = new User({ name, email, password: hashedPassword });
+    await newUser.save();
+
+    res.status(201).json({ message: 'User registered successfully', user: newUser });
+  } catch (error) {
+    console.error('Signup error:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
-
-  // Here you would typically hash the password and save the user to the database
-  // For simplicity, we will just return a success message
-  res.status(201).json({ message: 'User signed up successfully' });
 };
 
-export const login= async(req: Request, res: Response) => {
-  const { username, password } = req.body;
 
-  if (!username || !password) {
-   res.status(400).json({ message: 'Username and password are required' });
+export const login= async(req: Request, res: Response) => {
+  const { email, password } = req.body;
+  if (!req.body) {
+   res.status(400).json({ message: 'Request body is missing' });
    return;
   }
+  if (!email || !password) {
+   res.status(400).json({ message: 'Email and password are required' });
+   return;
+  }
+  // if (password.length < 6) {
+  //   res.status(400).json({ message: 'Password must be at least 6 characters long' });
+  //   return;
+  // }
 
-  // Here you would typically check the username and password against the database
-  // For simplicity, we will just return a success message
-  res.status(200).json({ message: 'User logged in successfully' });
-}
+  try {
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.status(401).json({ message: 'Invalid email or password' });
+      return;
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      res.status(401).json({ message: 'Invalid email or password' });
+      return;
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET || 'supersecretkey1234',
+      { expiresIn: '1d' }
+    );
+
+    res.status(200).json({
+      message: 'User logged in successfully',
+      token,
+      user: { id: user._id, name: user.name, email: user.email }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
